@@ -37,18 +37,24 @@ var isRelease = argv.indexOf('--release') > -1;
 
 gulp.task('watch', ['clean'], function(done){
   runSequence(
-    ['sass', 'html', 'fonts', 'scripts'],
+    ['sass', 'html', 'fonts', 'scripts', 'icons'],
     function(){
       gulpWatch('app/**/*.scss', function(){ gulp.start('sass'); });
       gulpWatch('app/**/*.html', function(){ gulp.start('html'); });
+      gulpWatch('app/**/*.png', function(){ gulp.start('icons'); });
       buildBrowserify({ watch: true }).on('end', done);
     }
   );
 });
 
+gulp.task('icons', function() {
+    gulp.src('app/**/**/*.png')
+    .pipe(gulp.dest('www/build'))
+});
+
 gulp.task('build', ['clean'], function(done){
   runSequence(
-    ['sass', 'html', 'fonts', 'scripts'],
+    ['sass', 'html', 'fonts', 'scripts', 'icons'],
     function(){
       buildBrowserify({
         minify: isRelease,

@@ -1,0 +1,50 @@
+<ion-navbar *navbar primary>
+  <ion-title>Мэдээлэл оруулах</ion-title>
+  <ion-buttons right>
+    <button (click)="saveInfo()">
+      <ion-icon name="ios-paper-plane"></ion-icon>
+    </button>
+  </ion-buttons>
+</ion-navbar>
+
+<ion-content padding class="add-info">
+  <ion-list>
+    <ion-item>
+      <ion-label fixed>Төрөл</ion-label>
+        <ion-select [(ngModel)]="type">
+        <ion-option value="restaurant">Restaurant</ion-option>
+        <ion-option value="nightclub">Night Club</ion-option>
+        <ion-option value="resort">Resort</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label fixed>Нэр</ion-label>
+      <ion-input type="text" value="" [(ngModel)]="title"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label fixed>Утас</ion-label>
+      <ion-input type="text" [(ngModel)]="phone"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label fixed>Нээх цаг</ion-label>
+      <ion-input type="text" [(ngModel)]="opentime"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label fixed>Хаах цаг</ion-label>
+      <ion-input type="text" [(ngModel)]="closetime"></ion-input>
+    </ion-item>
+  </ion-list>
+  <button (click)="addLocation()">
+    <ion-icon name="ios-navigate-outline"></ion-icon>
+    Байршил оруулах
+  </button>
+  <div>lat:{{location.latitude}} lon:{{location.longitude}}</div>
+  <hr>
+  <div>
+    <img *ngFor="let photo of photos" src="{{photo}}" class="photo_field">
+  </div>
+  <button (click)="addPhoto()">
+    <ion-icon name="ios-camera"></ion-icon>
+    Зураг оруулах
+  </button>
+</ion-content>

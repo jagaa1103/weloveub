@@ -1,13 +1,56 @@
-<ion-navbar *navbar>
+<!--<ion-navbar *navbar>
   <ion-title>
     Blank Starter
   </ion-title>
-</ion-navbar>
-
+</ion-navbar>-->
 <ion-content class="home" padding>
-  <h1 text-center>Press a button to navigate</h1>
-
-  <button block danger (click)="pushPage('Danger')">Danger</button>
-  <button block primary (click)="pushPage('Primary')">Primary</button>
-  <button block secondary (click)="pushPage('Secondary')">Secondary</button>
+  <div id="menu_space_top">
+    <img src="build/icons/city.png" width="150px">
+  </div>
+  <ion-grid>
+    <ion-row>
+      <ion-col width-50>
+        <div class="main_menu_card" (click)="goRestaurants()">
+          <div>
+            <div width="100%" height="100%">
+              <img src="build/icons/main_menu/restaurant.png" class="main_menu_card_icon">
+            </div>
+            <div class="main_menu_card_text">Restaurants</div>
+          </div>
+        </div>
+      </ion-col>
+      <ion-col width-50>
+        <div class="main_menu_card" (click)="goNightClubs()">
+          <div>
+            <div width="100%" height="100%">
+              <img src="build/icons/main_menu/night_club.png" class="main_menu_card_icon">
+            </div>
+            <div class="main_menu_card_text">Night Clubs</div>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col width-50>
+        <div class="main_menu_card" (click)="goResorts()">
+          <div>
+            <div width="100%" height="100%">
+              <img src="build/icons/main_menu/amralt.png" class="main_menu_card_icon">
+            </div>
+            <div class="main_menu_card_text">Resorts</div>
+          </div>
+        </div>
+      </ion-col>
+      <ion-col width-50>
+        <div class="main_menu_card" (click)="addInfo()">
+          <div>
+            <div width="100%" height="100%">
+              <img src="build/icons/add.png" class="main_menu_card_icon">
+            </div>
+            <div class="main_menu_card_text">Add Info</div>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
