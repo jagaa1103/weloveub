@@ -10,6 +10,9 @@ export class AddInfoPage {
     return [[NavController]];
   }
 
+  ohours = [];
+  ehours = [];
+
   type: String = "restaurant";
   title = "";
   phone = "";
@@ -22,7 +25,14 @@ export class AddInfoPage {
   photos = [];
     
 
+
   constructor() {
+    for(var i=0; i<24; i++){
+      this.ohours.push(i);
+    }
+    for(var i=0; i<24; i++){
+      this.ehours.push(i);
+    }
   }
 
   saveInfo(){
@@ -55,7 +65,12 @@ export class AddInfoPage {
     Camera.getPicture(options).then((imageData) => {
     let base64Image = "data:image/jpeg;base64," + imageData;
     console.log(base64Image);
+    if(this.photos.length < 11){
       this.photos.push(imageData);
+    }else{
+      alert("Та 10-аас дээш зураг оруулах боломжгүй.");
+    }
+      
     }, (err) => {
     });
   }

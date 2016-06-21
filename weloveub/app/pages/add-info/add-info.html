@@ -12,10 +12,10 @@
     <ion-item>
       <ion-label fixed>Төрөл</ion-label>
         <ion-select [(ngModel)]="type">
-        <ion-option value="restaurant">Restaurant</ion-option>
-        <ion-option value="nightclub">Night Club</ion-option>
-        <ion-option value="resort">Resort</ion-option>
-      </ion-select>
+          <ion-option value="restaurant">Restaurant</ion-option>
+          <ion-option value="nightclub">Night Club</ion-option>
+          <ion-option value="resort">Resort</ion-option>
+        </ion-select>
     </ion-item>
     <ion-item>
       <ion-label fixed>Нэр</ion-label>
@@ -27,24 +27,29 @@
     </ion-item>
     <ion-item>
       <ion-label fixed>Нээх цаг</ion-label>
-      <ion-input type="text" [(ngModel)]="opentime"></ion-input>
+      <ion-select [(ngModel)]="opentime">
+        <ion-option *ngFor="let ohour of ohours" value="{{ohour}}">{{ohour}}:00</ion-option>
+      </ion-select>
     </ion-item>
     <ion-item>
       <ion-label fixed>Хаах цаг</ion-label>
-      <ion-input type="text" [(ngModel)]="closetime"></ion-input>
+      <ion-select [(ngModel)]="closetime">
+        <ion-option *ngFor="let ehour of ehours" value="{{ehour}}">{{ehour}}:00</ion-option>
+      </ion-select>
     </ion-item>
   </ion-list>
+  <hr>
+  <div>Байршил:</div>
   <button (click)="addLocation()">
     <ion-icon name="ios-navigate-outline"></ion-icon>
-    Байршил оруулах
   </button>
   <div>lat:{{location.latitude}} lon:{{location.longitude}}</div>
   <hr>
+  <div>Зурагнууд:</div>
   <div>
-    <img *ngFor="let photo of photos" src="{{photo}}" class="photo_field">
+    <img *ngFor="let photo of photos" src="{{photo}}" style="border: 1px solid #171f32;margin-right: 5px;margin-top: 5px; width: 100px;">
   </div>
   <button (click)="addPhoto()">
-    <ion-icon name="ios-camera"></ion-icon>
-    Зураг оруулах
+      <ion-icon name="ios-camera"></ion-icon>
   </button>
 </ion-content>
