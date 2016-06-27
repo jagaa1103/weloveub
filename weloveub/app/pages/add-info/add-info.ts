@@ -1,61 +1,68 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, Loading } from 'ionic-angular';
+import {DataService, Info, Photo, Location} from '../../providers/data-service/data-service';
 import {Geolocation, Camera} from 'ionic-native';
+
+import {HomePage} from '../home/home';
 
 @Component({
   templateUrl: 'build/pages/add-info/add-info.html',
+  providers: [DataService]
 })
 export class AddInfoPage {
-  static get parameters() {
-    return [[NavController]];
-  }
 
   ohours = [];
   ehours = [];
-
-  type: String = "restaurant";
-  title = "";
-  phone = "";
-  opentime = 0;
-  closetime = 0;  
-  location = {
-    latitude: 0,
-    longitude: 0
-  };
   photos = [];
-    
+  photoFiles = [];
 
+  item:Info;
 
-  constructor() {
-    for(var i=0; i<24; i++){
-      this.ohours.push(i);
-    }
-    for(var i=0; i<24; i++){
-      this.ehours.push(i);
-    }
+  constructor(private _dataService: DataService, private _nav: NavController) {
+    this.photos = [];
+    this.item = new Info()
+    this.item.type = "restaurant";
+    this.prepareHours();
   }
 
   saveInfo(){
     console.log("::::::::: Save Info :::::::::");
-    console.log(this.type);
-    console.log(this.title);
-    console.log(this.phone);
-    console.log(this.opentime);
-    console.log(this.closetime);
-    console.log(this.location);
-    console.log(this.photos);
+    // this.savePhotos();
+    this._dataService.saveItem(this.item).then((data) => {
+      if(data){
+        console.log("Promise return backed");
+        this._nav.push(HomePage);
+      }
+    });
   }
+
+  // savePhotos(){
+  //   this._dataService.uploadPhotos(this.photos).then(urls => {
+  //     this.item.photos = urls;
+  //     this._dataService.saveItem(this.item).then(data => {
+  //       if(data){
+  //         console.log("Promise return backed");
+  //         this._nav.push(HomePage);
+  //       }
+  //     });
+  //   });
+  // }
 
   addLocation(){
     Geolocation.getCurrentPosition().then((resp) => {
-      this.location.latitude = resp.coords.latitude;
-      this.location.longitude = resp.coords.longitude;
+      if(resp && resp.coords){
+        this.item.location = resp.coords;
+        alert("Таны байршил:" + this.item.location.latitude + ", " + this.item.location.longitude);
+      }else{
+        alert("Таны байршлыг тогтоох боломжгүй байна");
+      }
     })
   }
+
   addPhoto(){
     var options = {
         quality: 50,
-        destinationType: Camera.DestinationType.FILE_URI,
+        destinationType: Camera.DestinationType.DATA_URL,
         sourceType: Camera.PictureSourceType.CAMERA,
         encodingType: Camera.EncodingType.JPEG,
         mediaType: Camera.MediaType.PICTURE,
@@ -63,28 +70,23 @@ export class AddInfoPage {
         correctOrientation: true  //Corrects Android orientation quirks
     }
     Camera.getPicture(options).then((imageData) => {
-    let base64Image = "data:image/jpeg;base64," + imageData;
-    console.log(base64Image);
-    if(this.photos.length < 11){
-      this.photos.push(imageData);
-    }else{
-      alert("Та 10-аас дээш зураг оруулах боломжгүй.");
-    }
-      
+      if(this.photos.length < 11){
+        this.photos.push(imageData);
+      }else{
+        alert("Та 10-аас дээш зураг оруулах боломжгүй.");
+      }  
     }, (err) => {
     });
   }
+
+  prepareHours(){
+    for(var i=0; i<24; i++){
+      this.ohours.push(i);
+    }
+    for(var i=0; i<24; i++){
+      this.ehours.push(i);
+    }
+  }
 }
 
-export class Info {
-  title: String;
-  phone: number;
-  time: String;
-  location: Location;
-  photos: Photo[];
-  others: String;
-}
 
-export class Photo{
-  source: String;
-}

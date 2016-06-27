@@ -1,0 +1,11 @@
+{
+  "resolution": "main",
+  "tree": {
+    "src": "https://raw.githubusercontent.com/bigsan/common-any/6cca28dc84997f95dacb380dcbb8913e374d18e4/typings.json",
+    "raw": "registry:common/any#0.1.0+20160611164354",
+    "main": "index.d.ts",
+    "global": false,
+    "name": "any",
+    "type": "typings"
+  }
+}

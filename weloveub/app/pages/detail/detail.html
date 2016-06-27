@@ -1,10 +1,30 @@
-<ion-navbar *navbar>
+<ion-navbar *navbar primary>
   <ion-title>
-    Detail
+    Дэлгэрэнгүй
   </ion-title>
 </ion-navbar>
 
 <ion-content class="detail">
-  <h1 text-center>Button Clicked:</h1>
-  <h2 text-center>{{color}}</h2>
+  
+  <ion-card>
+
+    <ion-slides pager>
+      <ion-slide *ngFor="let photo of info.photos">
+        <img [src]="photo">
+      </ion-slide>
+    </ion-slides>
+
+    <ion-item>
+      <ion-icon name="call" item-left large></ion-icon>
+      <h2>{{info.phone}}</h2>
+      <p>11 N. Way St, Madison, WI 53703</p>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon name="alarm" item-left large ></ion-icon>
+      <h2>{{info.opentime}}:00 - {{info.closetime}}:00</h2>
+      <p>14 S. Hop Avenue, Madison, WI 53703</p>
+    </ion-item>
+    <div id="map_field"></div>  
+  </ion-card>
 </ion-content>
