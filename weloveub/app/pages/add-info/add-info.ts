@@ -27,26 +27,26 @@ export class AddInfoPage {
 
   saveInfo(){
     console.log("::::::::: Save Info :::::::::");
-    // this.savePhotos();
+    this.savePhotos();
+  }
+
+  savePhotos(){
+    console.log("********** savePhotos ********");
+    this._dataService.uploadPhotos(this.photos);
+    // this._dataService.uploadPhotos(this.photos).then(urls => {
+    //   console.log("Photo urls arrived");
+    //   this.item.photos = urls;
+    //   this.saveToFirebase();
+    // });
+  }
+  saveToFirebase(){
+    console.log("//////// savePhotos /////////");
     this._dataService.saveItem(this.item).then((data) => {
       if(data){
-        console.log("Promise return backed");
         this._nav.push(HomePage);
       }
     });
   }
-
-  // savePhotos(){
-  //   this._dataService.uploadPhotos(this.photos).then(urls => {
-  //     this.item.photos = urls;
-  //     this._dataService.saveItem(this.item).then(data => {
-  //       if(data){
-  //         console.log("Promise return backed");
-  //         this._nav.push(HomePage);
-  //       }
-  //     });
-  //   });
-  // }
 
   addLocation(){
     Geolocation.getCurrentPosition().then((resp) => {

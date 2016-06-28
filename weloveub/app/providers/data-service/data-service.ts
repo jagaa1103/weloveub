@@ -1,8 +1,10 @@
 import { Injectable, Inject } from '@angular/core';
 // import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
+import {Observable} from 'rxjs/Observable';
 import * as firebase from 'firebase';
 import {AngularFire, FirebaseDatabase, FirebaseRef, FirebaseListObservable, FirebaseObjectObservable} from 'angularfire2';
+import {ImageUploader} from '../image-uploader/image-uploader';
 
 declare var firebase: any;
 
@@ -13,8 +15,9 @@ export class DataService {
   ref: any;
   storageRef: any;
   db: FirebaseDatabase;
+  imageUploader: ImageUploader;
   greeting: FirebaseObjectObservable<any>;
-  photoUrls = [];
+
   constructor(af: AngularFire) {
     this.ref = firebase.storage().ref;
     this.db = af.database;
@@ -37,25 +40,38 @@ export class DataService {
 
   saveItem(item: Info){
     // this.saveObject(item);
+    console.log("DataService >> saveItem" );
     return new Promise(resolve => {
         this.db.list('/items').push(item);
         resolve(true);
     });
   }
 
-  saveObject(item: Info){
-    window.history.back();
+  count = 0;
+  photoUrls = [];
+  urls = [];
+  imageDatas = [];
+  uploadPhotos(datas: any){
+      this.count = 0;
+      this.photoUrls = [];
+      this.imageDatas = datas;
+    
+      this.getPhotoUrl().subscribe(res => {
+        console.log(res);
+      });
   }
 
-  uploadPhotos(imageDatas: Array<String>){
-    return new Promise(resolve => {
-      imageDatas.forEach(function(imageData){
-        this.uploadImage(imageData).then((url) => {
-          this.photoUrls.push();
+  getPhotoUrl(){
+      return Observable.create(res => {
+        this.imageDatas.forEach((imageData) => {
+          this.uploadImage(imageData).then(url => {
+            res.next(url);
+            if(res.length == this.imageDatas.length){
+              res.complete();
+            }
+          });  
         });
       });
-      resolve(this.photoUrls);
-    });
   }
 
   uploadImage(imageSource: String){
@@ -66,22 +82,16 @@ export class DataService {
       var blob = this.b64toBlob(imageSource);
       blob.name = Math.random().toString(36).substr(2, 9) + '.jpg';
       console.log(blob);
-      
-      
       var uploadTask = this.storageRef.child('images/' + blob.name).put(blob);
       uploadTask.on('state_changed', function(snapshot){
-    // Observe state change events such as progress, pause, and resume
-    // See below for more detail
+        // console.log(snapshot);
       }, function(error) {
-        // Handle unsuccessful uploads
+        console.log(error);
+        resolve(error);
       }, function() {
-        // Handle successful uploads on complete
-        // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-        var downloadURL = uploadTask.snapshot.downloadURL;
-        resolve(downloadURL);
+        resolve(uploadTask.snapshot.downloadURL);
       });
-      console.log('upload done!!!');
-    })
+    });
   }
 
   b64toBlob(b64Data, sliceSize) {
@@ -106,7 +116,6 @@ export class DataService {
     var blob = new Blob(byteArrays, {type: 'image/jpeg'});
     return blob;
   }
-
 }
 
 export class Info {
@@ -126,4 +135,6 @@ export class Location{
 export class Photo{
   image: String;
 }
+
+
 

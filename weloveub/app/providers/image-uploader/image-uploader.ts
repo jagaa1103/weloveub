@@ -3,12 +3,6 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import * as firebase from 'firebase';
 
-/*
-  Generated class for the ImageUploader provider.
-
-  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
-  for more info on providers and Angular 2 DI.
-*/
 @Injectable()
 export class ImageUploader {
   data: any;
@@ -19,29 +13,23 @@ export class ImageUploader {
     this.storageRef = firebase.storage().ref();   // true
   }
 
-  uploadImage(imageSource: String){
+  uploadImage(imageSource: String, count: Number){
     console.log("sourceToImage");
     // var blob = new Blob([imageBase64], {type: 'image/jpeg'});
     // blob.name = Math.random().toString(36).substr(2, 9) + '.jpg';
     return new Promise(resolve => {
       var blob = this.b64toBlob(imageSource);
       blob.name = Math.random().toString(36).substr(2, 9) + '.jpg';
-      console.log(blob);
-      
       
       var uploadTask = this.storageRef.child('images/' + blob.name).put(blob);
       uploadTask.on('state_changed', function(snapshot){
-    // Observe state change events such as progress, pause, and resume
-    // See below for more detail
+        console.log(snapshot);
       }, function(error) {
-        // Handle unsuccessful uploads
+        resolve(false);
       }, function() {
-        // Handle successful uploads on complete
-        // For instance, get the download URL: https://firebasestorage.googleapis.com/...
         var downloadURL = uploadTask.snapshot.downloadURL;
         resolve(downloadURL);
       });
-      console.log('upload done!!!');
     })
     
   }
