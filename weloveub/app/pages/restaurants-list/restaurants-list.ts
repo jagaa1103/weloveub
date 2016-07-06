@@ -23,27 +23,34 @@ export class RestaurantsListPage {
   segment = "байршил";
   loading: Loading = null;
 
-  constructor(private dataService: DataService, private loadingService: LoadingService, private view: ViewController, private _navController: NavController, private _navParams: NavParams) {
+  constructor(private dataService: DataService, private loadingService: LoadingService, private view: ViewController, private _nav: NavController, private _navParams: NavParams) {
     console.log("RestaurantsListPage init");
-    this.loading = Loading.create({
-      content: "Та түр хүлээнэ үү..."
+    if(!this.loading){
+      this.loading = Loading.create({
+        content: "Та түр хүлээнэ үү...",
+        dismissOnPageChange: true
+      });
+      this._nav.present(this.loading);
+    }
+    this.dataService.getData("restaurant").subscribe(res => {
+      this.showList(res);
+
+      if(res.length > 0 && this.loading !== null){
+        setTimeout(() => {
+          this.loading.dismiss();
+          this.loading = null;
+        }, 100);
+      }
     });
-    this._navController.present(this.loading);
-    this.dataService.getAllData().subscribe(data => this.showList(data));
   }
 
   showList(items){
     this.items = items;
-    if(this.loading !== null){
-      this.loading.dismiss();
-      this.loading = null; 
-    }
-    
     console.log(this.items);
   }
 
   showDetail(item){
-    this._navController.push(DetailPage, {
+    this._nav.push(DetailPage, {
       item: item
     });
   }

@@ -3,5 +3,25 @@
 </ion-navbar>
 
 <ion-content padding class="resorts-list">
-  
+  <ion-segment [(ngModel)]="segment" padding>
+    <ion-segment-button value="байршил">
+      Байршлаар
+    </ion-segment-button>
+    <ion-segment-button value="жагсаалтаар">
+      Жагсаалтаар
+    </ion-segment-button>
+  </ion-segment>
+  <ion-list>
+    <ion-item *ngFor="let item of items" (click)="showDetail(item)" tappable>
+      <ion-thumbnail item-left *ngIf="item.photos">
+        <img [src]="item.photos[0]">
+      </ion-thumbnail>
+      <ion-thumbnail item-left *ngIf="!item.photos">
+        <img src="build/icons/photo_sample.png">
+      </ion-thumbnail>
+      <h1>{{item.title}}</h1>
+      <div><ion-icon name="call"></ion-icon> {{item.phone}}</div>
+      <div><ion-icon name="alarm"></ion-icon> {{item.opentime}}:00 - {{item.closetime}}:00</div>
+    </ion-item>
+  </ion-list>
 </ion-content>

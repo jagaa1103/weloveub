@@ -1,7 +1,7 @@
 import {Component} from "@angular/core";
 import {NavController} from 'ionic-angular';
 import {RestaurantsListPage} from '../restaurants-list/restaurants-list';
-import {NightclubsListPage} from '../nightclubs-list/nightclubs-list';
+import {CoffeeshopListPage} from '../coffeeshop-list/coffeeshop-list';
 import {ResortsListPage} from '../resorts-list/resorts-list';
 import {AddInfoPage} from '../add-info/add-info';
 
@@ -13,16 +13,12 @@ export class HomePage {
 
   }
 
-  // pushPage(buttonColor: string) {
-  //   this._navController.push(DetailPage, { color: buttonColor });
-  // }
-
   goRestaurants(){
     this.nav.push(RestaurantsListPage);
   }
 
-  goNightClubs(){
-    this.nav.push(NightclubsListPage);
+  goCoffeeshops(){
+    this.nav.push(CoffeeshopListPage);
   }
 
   goResorts(){

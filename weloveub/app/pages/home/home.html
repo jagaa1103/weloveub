@@ -3,9 +3,10 @@
     Blank Starter
   </ion-title>
 </ion-navbar>-->
-<ion-content class="home" padding>
+<ion-content id="home" padding>
   <div id="menu_space_top">
     <img src="build/icons/city.png" width="150px">
+    <h1 style="color: #fff;">WE <span><img src="build/icons/hearts.png" width="25px"></span> UB</h1>
   </div>
   <ion-grid>
     <ion-row>
@@ -20,12 +21,12 @@
         </div>
       </ion-col>
       <ion-col width-50>
-        <div class="main_menu_card" (click)="goNightClubs()" tappable>
+        <div class="main_menu_card" (click)="goCoffeeshops()" tappable>
           <div>
             <div width="100%" height="100%">
               <img src="build/icons/main_menu/night_club.png" class="main_menu_card_icon">
             </div>
-            <div class="main_menu_card_text">Night Clubs</div>
+            <div class="main_menu_card_text">Coffee Shops</div>
           </div>
         </div>
       </ion-col>

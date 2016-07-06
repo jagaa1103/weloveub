@@ -41,14 +41,14 @@ gulp.task('watch', ['clean'], function(done){
     function(){
       gulpWatch('app/**/*.scss', function(){ gulp.start('sass'); });
       gulpWatch('app/**/*.html', function(){ gulp.start('html'); });
-      gulpWatch('app/**/*.png', function(){ gulp.start('icons'); });
+      gulpWatch('app/**/*.*', function(){ gulp.start('icons'); });
       buildBrowserify({ watch: true }).on('end', done);
     }
   );
 });
 
 gulp.task('icons', function() {
-    gulp.src('app/**/**/*.png')
+    gulp.src('app/**/**/*.*')
     .pipe(gulp.dest('www/build'))
 });
 

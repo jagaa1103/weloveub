@@ -8,12 +8,13 @@
 </ion-navbar>
 
 <ion-content padding class="add-info">
+  <div padding>Мэдээлэл:</div>
   <ion-list>
     <ion-item>
       <ion-label fixed>Төрөл</ion-label>
         <ion-select [(ngModel)]="item.type">
           <ion-option value="restaurant">Restaurant</ion-option>
-          <ion-option value="nightclub">Night Club</ion-option>
+          <ion-option value="coffeeshop">Coffee shop</ion-option>
           <ion-option value="resort">Resort</ion-option>
         </ion-select>
     </ion-item>
@@ -23,7 +24,7 @@
     </ion-item>
     <ion-item>
       <ion-label fixed>Утас</ion-label>
-      <ion-input type="text" [(ngModel)]="item.phone"></ion-input>
+      <ion-input type="number" [(ngModel)]="item.phone"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label fixed>Нээх цаг</ion-label>
@@ -38,17 +39,21 @@
       </ion-select>
     </ion-item>
   </ion-list>
-  <hr>
-  <div>Байршил:</div>
-  <button (click)="addLocation()">
-    <ion-icon name="ios-navigate-outline"></ion-icon>
-  </button>
-  <hr>
-  <div>Зурагнууд:</div>
-  <div>
-    <img *ngFor="let photo of photos" src="data:image/jpeg;base64,{{photo}}" style="border: 1px solid #171f32;margin-right: 5px;margin-top: 5px; width: 100px;">
+  <div padding>
+    <div>Байршил:</div>
+    <button (click)="addLocation()">
+      <ion-icon name="ios-navigate-outline"></ion-icon>
+    </button>
+    <span *ngIf="item.location">{{item.location.latitude}}, {{item.location.longitude}}</span>
   </div>
-  <button (click)="addPhoto()">
-      <ion-icon name="ios-camera"></ion-icon>
-  </button>
+  <div padding>
+    <div>Зурагнууд:</div>
+    <div>
+      <img *ngFor="let photo of photos" src="data:image/jpeg;base64,{{photo}}" style="border: 1px solid #171f32;margin-right: 5px;margin-top: 5px; width: 100px;">
+    </div>
+    <button (click)="addPhoto()">
+        <ion-icon name="ios-camera"></ion-icon>
+    </button>
+  </div>
+  
 </ion-content>

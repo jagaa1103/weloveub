@@ -15,7 +15,7 @@ export class AddInfoPage {
   ehours = [];
   photos = [];
   photoFiles = [];
-
+  loading: Loading = null;
   item:Info;
 
   constructor(private _dataService: DataService, private _nav: NavController) {
@@ -26,23 +26,34 @@ export class AddInfoPage {
   }
 
   saveInfo(){
+     if(!this.loading){
+      this.loading = Loading.create({
+        content: "Та түр хүлээнэ үү...",
+        dismissOnPageChange: true
+      });
+      this._nav.present(this.loading);
+    }
     console.log("::::::::: Save Info :::::::::");
     this.savePhotos();
   }
 
   savePhotos(){
     console.log("********** savePhotos ********");
-    this._dataService.uploadPhotos(this.photos);
-    // this._dataService.uploadPhotos(this.photos).then(urls => {
-    //   console.log("Photo urls arrived");
-    //   this.item.photos = urls;
-    //   this.saveToFirebase();
-    // });
+    this._dataService.getPhotoUrl(this.photos).then((urls) => {
+      this.item.photos = urls;
+      console.log(this.item);
+      this.saveToFirebase(this.item);
+    });
   }
-  saveToFirebase(){
+  saveToFirebase(info: Info){
     console.log("//////// savePhotos /////////");
-    this._dataService.saveItem(this.item).then((data) => {
+    this._dataService.saveItem(info).then((data) => {
       if(data){
+        setTimeout(()=>{
+          if(this.loading !== null){
+            this.loading.dismiss();
+          }
+        }, 100);
         this._nav.push(HomePage);
       }
     });
@@ -52,11 +63,10 @@ export class AddInfoPage {
     Geolocation.getCurrentPosition().then((resp) => {
       if(resp && resp.coords){
         this.item.location = resp.coords;
-        alert("Таны байршил:" + this.item.location.latitude + ", " + this.item.location.longitude);
       }else{
         alert("Таны байршлыг тогтоох боломжгүй байна");
       }
-    })
+    });
   }
 
   addPhoto(){

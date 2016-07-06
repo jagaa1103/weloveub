@@ -15,7 +15,6 @@ export class DataService {
   ref: any;
   storageRef: any;
   db: FirebaseDatabase;
-  imageUploader: ImageUploader;
   greeting: FirebaseObjectObservable<any>;
 
   constructor(af: AngularFire) {
@@ -35,84 +34,64 @@ export class DataService {
     });
   }
   getAllData(){
-    return this.db.list('items');
+    return this.db.list('items/');
+  }
+  getData(type){
+    return this.db.list('items/'+type);
   }
 
   saveItem(item: Info){
     // this.saveObject(item);
     console.log("DataService >> saveItem" );
     return new Promise(resolve => {
-        this.db.list('/items').push(item);
+        this.db.list('/items/' + item.type).push(item);
         resolve(true);
     });
   }
 
-  count = 0;
-  photoUrls = [];
-  urls = [];
-  imageDatas = [];
-  uploadPhotos(datas: any){
-      this.count = 0;
-      this.photoUrls = [];
-      this.imageDatas = datas;
-    
-      this.getPhotoUrl().subscribe(res => {
-        console.log(res);
-      });
-  }
-
-  getPhotoUrl(){
-      return Observable.create(res => {
-        this.imageDatas.forEach((imageData) => {
-          this.uploadImage(imageData).then(url => {
-            res.next(url);
-            if(res.length == this.imageDatas.length){
-              res.complete();
-            }
-          });  
+  getPhotoUrl(images: any){
+      return new Promise(resolve => {
+        var imageSources = images;
+        var urls = [];
+        imageSources.forEach((image) => {
+            this.uploadImage(image).subscribe(url => {
+              urls.push(url);
+              if(urls.length == imageSources.length){
+                  resolve(urls);
+              }
+            });  
         });
       });
   }
-
   uploadImage(imageSource: String){
     console.log("sourceToImage");
-    // var blob = new Blob([imageBase64], {type: 'image/jpeg'});
-    // blob.name = Math.random().toString(36).substr(2, 9) + '.jpg';
-    return new Promise(resolve => {
+    return Observable.create(res => {
       var blob = this.b64toBlob(imageSource);
       blob.name = Math.random().toString(36).substr(2, 9) + '.jpg';
-      console.log(blob);
       var uploadTask = this.storageRef.child('images/' + blob.name).put(blob);
       uploadTask.on('state_changed', function(snapshot){
-        // console.log(snapshot);
       }, function(error) {
         console.log(error);
-        resolve(error);
+        res(error);
       }, function() {
-        resolve(uploadTask.snapshot.downloadURL);
+        res.next(uploadTask.snapshot.downloadURL);
       });
     });
   }
 
   b64toBlob(b64Data, sliceSize) {
     var sliceSize:any = sliceSize || 512;
-
     var byteCharacters = atob(b64Data);
     var byteArrays = [];
-
     for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
       var slice = byteCharacters.slice(offset, offset + sliceSize);
-
       var byteNumbers = new Array(slice.length);
       for (var i = 0; i < slice.length; i++) {
         byteNumbers[i] = slice.charCodeAt(i);
       }
-
       var byteArray = new Uint8Array(byteNumbers);
-
       byteArrays.push(byteArray);
     }
-      
     var blob = new Blob(byteArrays, {type: 'image/jpeg'});
     return blob;
   }
@@ -123,13 +102,13 @@ export class Info {
   title: String;
   phone: number;
   time: String;
-  location: Location;
-  photos: any[];
+  location: Coordinates;
+  photos: any;
   others: String;
 }
 export class Location{
-  latitude: String;
-  longitude: String;
+  latitude: any;
+  longitude: any;
 }
 
 export class Photo{

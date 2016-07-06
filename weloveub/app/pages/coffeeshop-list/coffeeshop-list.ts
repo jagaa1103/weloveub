@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
 import { NavController, Loading } from 'ionic-angular';
-import { DataService } from '../../providers/data-service/data-service';
+import { DataService } from '../../providers/data-service/data-service'; 
 import { DetailPage } from '../detail/detail';
-
 @Component({
-  templateUrl: 'build/pages/resorts-list/resorts-list.html',
+  templateUrl: 'build/pages/coffeeshop-list/coffeeshop-list.html',
   providers: [DataService]
 })
-export class ResortsListPage {
+
+export class CoffeeshopListPage {
   
-  items = [];
+ items = [];
   segment = "байршил";
   loading: Loading = null;
   
@@ -21,7 +21,7 @@ export class ResortsListPage {
       });
       this._nav.present(this.loading);
     }
-    this.dataService.getData("resort").subscribe(res => {
+    this.dataService.getData("coffeeshop").subscribe(res => {
       this.showList(res);
 
       if(res.length > 0 && this.loading !== null){

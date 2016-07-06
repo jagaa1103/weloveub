@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import * as firebase from 'firebase';
+import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class ImageUploader {
@@ -13,25 +14,22 @@ export class ImageUploader {
     this.storageRef = firebase.storage().ref();   // true
   }
 
-  uploadImage(imageSource: String, count: Number){
+  uploadImage(imageSource: String){
     console.log("sourceToImage");
-    // var blob = new Blob([imageBase64], {type: 'image/jpeg'});
-    // blob.name = Math.random().toString(36).substr(2, 9) + '.jpg';
-    return new Promise(resolve => {
+    
+    return Observable.create(res => {
       var blob = this.b64toBlob(imageSource);
       blob.name = Math.random().toString(36).substr(2, 9) + '.jpg';
-      
       var uploadTask = this.storageRef.child('images/' + blob.name).put(blob);
       uploadTask.on('state_changed', function(snapshot){
-        console.log(snapshot);
+        // console.log(snapshot);
       }, function(error) {
-        resolve(false);
+        console.log(error);
+        res(error);
       }, function() {
-        var downloadURL = uploadTask.snapshot.downloadURL;
-        resolve(downloadURL);
+        res.next(uploadTask.snapshot.downloadURL);
       });
-    })
-    
+    });
   }
 
   b64toBlob(b64Data, sliceSize) {
